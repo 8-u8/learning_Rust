@@ -45,7 +45,8 @@ fn listdir() -> std::io::Result<()> {
 
 fn main() {
     listdir().unwrap();
-    let file = File::open("/home/t0_u0/Desktop/load_lib/BostonHouseCredit.csv").unwrap();
+    // todo filename from stdin.
+    let file = File::open("hogehoge").unwrap();
     let bos: DMatrix<f64> = parse_csv(BufReader::new(file)).unwrap();
     println!("{}", bos.rows(0, 5));
 }
