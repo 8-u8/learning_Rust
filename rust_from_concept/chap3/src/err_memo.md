@@ -88,3 +88,58 @@ fn main() {
     myprint(&s); // t = &sは、tにsの所有権を貸す。
 }
 ```
+
+# 3.4
+## 問題: ミュータブルな変数のリファレンスをシンプルにやるとだめ
+```rust
+// fn myprint<T: std::fmt::Display>(msg: &T) {
+//     println!("{}", *msg);
+// }
+
+fn myclear(x: &String) {
+    x.clear();
+}
+
+fn main() {
+    let mut s = "Hello".to_string();
+    println!("s = {}", s);
+    let s_ref = &s;
+
+    myclear(&s);
+
+    println!("s = {}", s);
+
+}
+
+error[E0596]: cannot borrow `*x` as mutable, as it is behind a `&` reference
+ --> src/main.rs:6:5
+  |
+5 | fn myclear(x: &String) {
+  |               ------- help: consider changing this to be a mutable reference: `&mut String`
+6 |     x.clear();
+  |     ^^^^^^^^^ `x` is a `&` reference, so the data it refers to cannot be borrowed as mutable
+
+```
+## 回避方法: ミュータブルなリファレンスを渡す
+```rust
+// fn myprint<T: std::fmt::Display>(msg: &T) {
+//     println!("{}", *msg);
+// }
+
+fn myclear(x: &mut String) {
+    x.clear();
+}
+
+fn main() {
+    let mut s = "Hello".to_string();
+    println!("s = {}", s);
+    let s_ref = &mut s;
+
+    myclear(s_ref);
+
+    println!("s = {}", s);
+
+}
+```
+- ミュータブルな借用は1回まで。
+- リファレンスが保持しているデータはCでいうポインタと同じ。
