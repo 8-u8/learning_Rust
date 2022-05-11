@@ -1,5 +1,9 @@
+fn myprint<T: std::fmt::Display>(msg: &T) {
+    println!("{}", *msg);
+}
+
 fn main() {
-    let mut x = 1; // 型は推論される
-    x += 1; //error
-    println!("x = {}", x);
+    let s = "Hello".to_string();
+    myprint(&s);
+    myprint(&s); // もう一回
 }
